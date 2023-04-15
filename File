@@ -1,0 +1,45 @@
+import shopify
+import requests
+import json
+
+# Set up Shopify API credentials
+shop_url = 'testbonotest.myshopify.com'
+api_key = '5c991af7fb9268395b50f4a0f24ef691'
+password = '2464309dfa10a33c5583ee46d4c4239e'
+
+# Connect to Shopify API
+try:
+    session = shopify.Session(shop_url, '2023-04', password)
+    shopify.ShopifyResource.activate_session(session)
+    print(session.url)
+except Exception as e:
+    print(f"Error connecting to Shopify API: {e}")
+    exit()
+
+# Get all products from the Shopify store
+try:
+    products = shopify.Product.find()
+except Exception as e:
+    print(f"Error getting products from Shopify API: {e}")
+    exit()
+
+# Extract product information and save to file
+product_data = []
+for product in products:
+    product_info = {
+        'title': product.title,
+        'description': product.body_html,
+        'price': float(product.variants[0].price),
+    }
+    image_url = product.image.src
+    try:
+        image_data = requests.get(image_url).content
+    except Exception as e:
+        print(f"Error getting image data from {image_url}: {e}")
+        continue
+    with open(f"{product.handle}.jpg", 'wb') as f:
+        f.write(image_data)
+    product_data.append(product_info)
+
+with open('products.json', 'w') as f:
+    json.dump(product_data, f)
