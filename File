@@ -4,8 +4,8 @@ import json
 
 # Set up Shopify API credentials
 shop_url = 'testbonotest.myshopify.com'
-api_key = '5c991af7fb9268395b50f4a0f24ef691'
-password = '2464309dfa10a33c5583ee46d4c4239e'
+api_key = '3360de6eb6e96e914dd55110286f423b'
+password = 'bf025f06f0643cf8381b00ce14bbb027'
 
 # Connect to Shopify API
 try:
